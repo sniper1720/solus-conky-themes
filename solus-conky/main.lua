@@ -1,5 +1,49 @@
+local function inject_globals(t)
+    if type(t) ~= "table" then return end
+    for k,v in pairs(t) do
+        if not _G[k] then _G[k] = v end
+        if k:sub(1,6) ~= "cairo_" and not _G["cairo_" .. k] then
+            _G["cairo_" .. k] = v
+        end
+    end
+end
 
-require "cairo"
+local ok, ret = pcall(require, "cairo")
+if ok then
+    if type(ret) == "table" then
+        inject_globals(ret)
+    elseif type(ret) == "string" then
+        local loader = package.loadlib(ret, "luaopen_cairo")
+        if loader then 
+            local res = loader()
+            if type(res) == "function" then res = res() end
+            inject_globals(res)
+        end
+    end
+end
+
+if not cairo_xlib_surface_create then
+    local paths = {
+        "/usr/lib/conky/libcairo_xlib.so",
+        "/usr/local/lib/conky/libcairo_xlib.so"
+    }
+    
+    for _, path in ipairs(paths) do
+        local loader = package.loadlib(path, "luaopen_cairo_xlib")
+        if not loader then loader = package.loadlib(path, "luaopen_cairo") end
+        
+        if loader then
+            local res = loader()
+            if type(res) == "function" then res = res() end
+            inject_globals(res)
+        end
+        if cairo_xlib_surface_create then break end
+    end
+end
+
+if not cairo_create then
+    print("Warning: cairo_create is still nil. Lua graphics will fail.")
+end
 
 local config_dir = conky_config:gsub("conky.conf$", "")
 package.path = config_dir .. "?.lua;" .. package.path

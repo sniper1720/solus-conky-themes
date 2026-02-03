@@ -122,7 +122,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 Type=Application
 Name=Solus Conky
 Comment=Solus Conky Theme
-Exec=conky -c $INSTALL_DIR/conky.conf --daemonize --pause=5
+Exec=env XDG_SESSION_TYPE=x11 conky -c $INSTALL_DIR/conky.conf --daemonize --pause=5
 StartupNotify=false
 Terminal=false
 Hidden=false
@@ -138,11 +138,11 @@ read -p "Do you want to start it right now? (y/N) " -n 1 -r < /dev/tty
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
     killall conky 2>/dev/null || true
-    conky -c "$INSTALL_DIR/conky.conf" --daemonize
+    env XDG_SESSION_TYPE=x11 conky -c "$INSTALL_DIR/conky.conf" --daemonize
     echo "Conky started."
 else
     echo -e "You can start the theme manually with:"
-    echo -e "  ${BLUE}conky -c $INSTALL_DIR/conky.conf${NC}"
+    echo -e "  ${BLUE}XDG_SESSION_TYPE=x11 conky -c $INSTALL_DIR/conky.conf${NC}"
 fi
 
 echo -e "\nEnjoy!"
