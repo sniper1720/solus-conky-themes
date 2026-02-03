@@ -5,7 +5,7 @@ Originally created in 2016, I have completely modernized the classic Octupi/Solu
 
 ## Features
 - **Visuals**: A sleek, Octupi-inspired dashboard design featuring CPU, RAM, Network, and Disk stats.
-- **Unified Theme**: Switch between **Dark** and **Light** modes (previously separate themes) via the `settings.lua` configuration module.
+- **Unified Theme**: Switch between **Dark** and **Light** modes via the `settings.lua` configuration module.
 - **Native Wayland**: Automatically detects your session (Wayland/X11) and adapts natively.
 - **Performance**: Optimized Lua code that uses Cairo graphics for smooth rendering.
 - **Configuration**: One simple file (`settings.lua`) controls everything.
@@ -15,7 +15,7 @@ Originally created in 2016, I have completely modernized the classic Octupi/Solu
 The setup script handles everything: **Dependencies, Fonts, Configuration, and Autostart**.
 
 ```bash
-curl -sL https://raw.githubusercontent.com/sniper1720/solus-conky-themes/main/solus-conky/setup.sh | bash
+curl -sL https://raw.githubusercontent.com/sniper1720/solus-conky-themes/main/setup.sh | bash
 ```
 
 *Simply follow the on-screen prompts to select your theme preference (Dark/Light) and network interface.*
@@ -37,12 +37,12 @@ sudo eopkg it conky
 ### 2. Fonts & Assets
 ```bash
 mkdir -p ~/.local/share/fonts
-cp assets/fonts/*.ttf ~/.local/share/fonts/
+cp solus-conky/assets/fonts/*.ttf ~/.local/share/fonts/
 fc-cache -fv
 ```
 
 ### 3. Configuration
-Edit `settings.lua` manually to match your system:
+Edit `solus-conky/settings.lua` manually to match your system:
 
 ```lua
 return {
@@ -60,8 +60,8 @@ return {
 
 ### 4. Usage
 ```bash
-# Run from the theme directory
-conky -c conky.conf
+# Run from the repository root
+conky -c solus-conky/conky.conf
 ```
 
 ## Technical Details
@@ -69,15 +69,15 @@ conky -c conky.conf
 For developers or power users who want to extend the theme:
 
 ### Architecture
-- **conky.conf**: The entry point. Defines the window properties, refresh rates, and hooks into `main.lua`.
-- **main.lua**: The core logic.
+- **solus-conky/conky.conf**: The entry point. Defines the window properties, refresh rates, and hooks into `main.lua`.
+- **solus-conky/main.lua**: The core logic.
     - Uses `cairo` for drawing 2D vector graphics (rings, shapes).
     - Implements a `conky_main()` hook that runs every update cycle.
     - Dynamically loads assets based on the `settings.theme_mode`.
-- **settings.lua**: A pure Lua module returning a table. Decouples config from logic.
+- **solus-conky/settings.lua**: A pure Lua module returning a table. Decouples config from logic.
 
 ### Customization
-To add new rings or modify graphics, edit `conky_main()` in `main.lua`. The `draw_section()` helper function handles the geometry for standard rings:
+To add new rings or modify graphics, edit `conky_main()` in `solus-conky/main.lua`. The `draw_section()` helper function handles the geometry for standard rings:
 
 ```lua
 -- Example: Adding a new ring at 250 degrees
@@ -112,4 +112,4 @@ Every bit of support helps keep the project alive and ensures I can spend more t
 
 ## License
 
-This project is licensed under the **GPL-3.0 License**. See the [LICENSE](../LICENSE) file for details.
+This project is licensed under the **GPL-3.0 License**. See the [LICENSE](LICENSE) file for details.
