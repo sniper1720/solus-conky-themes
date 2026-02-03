@@ -8,6 +8,8 @@ GREEN='\033[0;32m'
 BLUE='\033[0;34m'
 NC='\033[0m'
 
+INSTALL_DIR="$HOME/.config/solus-conky"
+
 if [ ! -d "solus-conky/assets" ] || [ ! -f "solus-conky/conky.conf" ]; then
     echo -e "${BLUE}[!] It looks like you're running this script remotely.${NC}"
     echo -e "${GREEN}[+] Cloning the repository...${NC}"
@@ -24,6 +26,10 @@ if [ ! -d "solus-conky/assets" ] || [ ! -f "solus-conky/conky.conf" ]; then
     cd "$TEMP_DIR"
     
     bash ./setup.sh local < /dev/tty
+    
+    # Cleanup temp dir after install
+    cd
+    rm -rf "$TEMP_DIR"
     exit 0
 fi
 
@@ -56,11 +62,22 @@ if command -v fc-cache &> /dev/null; then
     echo "Fonts cache updated."
 fi
 
+echo -e "\n${GREEN}[+] Installing Theme Files...${NC}"
+# Remove old install if exists
+if [ -d "$INSTALL_DIR" ]; then
+    echo "Removing existing installation at $INSTALL_DIR..."
+    rm -rf "$INSTALL_DIR"
+fi
+
+mkdir -p "$INSTALL_DIR"
+cp -r solus-conky/* "$INSTALL_DIR/"
+echo "Theme installed to $INSTALL_DIR"
+
 echo -e "\n${BLUE}=======================================${NC}"
 echo -e "${BLUE}         Configuration Setup           ${NC}"
 echo -e "${BLUE}=======================================${NC}"
 
-SETTINGS_FILE="solus-conky/settings.lua"
+SETTINGS_FILE="$INSTALL_DIR/settings.lua"
 
 echo -e "\nAvailable Network Interfaces:"
 ip -o link show | awk -F': ' '{print $2}' | grep -v "lo"
@@ -104,7 +121,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 Type=Application
 Name=Solus Conky
 Comment=Solus Conky Theme
-Exec=conky -c $(pwd)/solus-conky/conky.conf --daemonize --pause=5
+Exec=conky -c $INSTALL_DIR/conky.conf --daemonize --pause=5
 StartupNotify=false
 Terminal=false
 Hidden=false
@@ -118,13 +135,13 @@ EOF
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         killall conky 2>/dev/null || true
-        conky -c "$(pwd)/solus-conky/conky.conf" --daemonize
+        conky -c "$INSTALL_DIR/conky.conf" --daemonize
         echo "Conky started."
     fi
 else
     echo -e "\n${GREEN}[+] Setup Complete!${NC}"
     echo -e "You can start the theme manually with:"
-    echo -e "  ${BLUE}conky -c $(pwd)/solus-conky/conky.conf${NC}"
+    echo -e "  ${BLUE}conky -c $INSTALL_DIR/conky.conf${NC}"
 fi
 
 echo -e "\nEnjoy!"
