@@ -104,6 +104,7 @@ echo -e "\n${GREEN}[+] Applying Configuration...${NC}"
 
 sed -i "s/network_interface = \".*\"/network_interface = \"$USER_INTERFACE\"/" "$SETTINGS_FILE"
 sed -i "s/theme_mode = \".*\"/theme_mode = \"$THEME_MODE\"/" "$SETTINGS_FILE"
+sed -i "s|lua_load = 'main.lua'|lua_load = '$INSTALL_DIR/main.lua'|" "$INSTALL_DIR/conky.conf"
 
 echo "Configuration saved."
 
@@ -127,19 +128,19 @@ Terminal=false
 Hidden=false
 EOF
     echo "Autostart entry created at $HOME/.config/autostart/solus-conky.desktop"
-    
     echo -e "\n${GREEN}[+] Setup Complete!${NC}"
     echo "The theme will start automatically on your next login."
-    
-    read -p "Do you want to start it right now? (y/N) " -n 1 -r < /dev/tty
-    echo
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
-        killall conky 2>/dev/null || true
-        conky -c "$INSTALL_DIR/conky.conf" --daemonize
-        echo "Conky started."
-    fi
 else
     echo -e "\n${GREEN}[+] Setup Complete!${NC}"
+fi
+
+read -p "Do you want to start it right now? (y/N) " -n 1 -r < /dev/tty
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+    killall conky 2>/dev/null || true
+    conky -c "$INSTALL_DIR/conky.conf" --daemonize
+    echo "Conky started."
+else
     echo -e "You can start the theme manually with:"
     echo -e "  ${BLUE}conky -c $INSTALL_DIR/conky.conf${NC}"
 fi
