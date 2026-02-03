@@ -23,7 +23,7 @@ if [ ! -d "solus-conky/assets" ] || [ ! -f "solus-conky/conky.conf" ]; then
     echo -e "${GREEN}[+] Repository cloned. Moving to project directory...${NC}"
     cd "$TEMP_DIR"
     
-    bash ./setup.sh local
+    bash ./setup.sh local < /dev/tty
     exit 0
 fi
 
@@ -65,7 +65,7 @@ SETTINGS_FILE="solus-conky/settings.lua"
 echo -e "\nAvailable Network Interfaces:"
 ip -o link show | awk -F': ' '{print $2}' | grep -v "lo"
 echo
-read -p "Enter your network interface (e.g., wlo1): " USER_INTERFACE
+read -p "Enter your network interface (e.g., wlo1): " USER_INTERFACE < /dev/tty
 
 if [ -z "$USER_INTERFACE" ]; then
     USER_INTERFACE="wlo1"
@@ -75,7 +75,7 @@ fi
 echo -e "\nSelect Theme Mode:"
 echo "1) Dark (Default)"
 echo "2) White"
-read -p "Choice [1-2]: " THEME_CHOICE
+read -p "Choice [1-2]: " THEME_CHOICE < /dev/tty
 
 if [ "$THEME_CHOICE" == "2" ]; then
     THEME_MODE="WHITE"
@@ -94,7 +94,7 @@ echo -e "\n${BLUE}=======================================${NC}"
 echo -e "${BLUE}          Autostart Setup              ${NC}"
 echo -e "${BLUE}=======================================${NC}"
 
-read -p "Do you want to start this theme automatically at login? (y/N) " -n 1 -r
+read -p "Do you want to start this theme automatically at login? (y/N) " -n 1 -r < /dev/tty
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
     mkdir -p "$HOME/.config/autostart"
@@ -114,7 +114,7 @@ EOF
     echo -e "\n${GREEN}[+] Setup Complete!${NC}"
     echo "The theme will start automatically on your next login."
     
-    read -p "Do you want to start it right now? (y/N) " -n 1 -r
+    read -p "Do you want to start it right now? (y/N) " -n 1 -r < /dev/tty
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         killall conky 2>/dev/null || true

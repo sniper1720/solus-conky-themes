@@ -15,7 +15,7 @@ Originally created in 2016, I have completely modernized the classic Octupi/Solu
 The setup script handles everything: **Dependencies, Fonts, Configuration, and Autostart**.
 
 ```bash
-curl -sL https://raw.githubusercontent.com/sniper1720/solus-conky-themes/master/setup.sh | bash
+curl -fsSL https://raw.githubusercontent.com/sniper1720/solus-conky-themes/master/setup.sh | bash
 ```
 
 *Simply follow the on-screen prompts to select your theme preference (Dark/Light) and network interface.*
