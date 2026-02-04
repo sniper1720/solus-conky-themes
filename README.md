@@ -1,11 +1,15 @@
 # Solus Conky Themes
 
-Originally created in 2016, I have completely modernized the classic Octupi/Solus theme, refactoring the codebase to utilize the latest Lua API and Cairo graphics engine for enhanced stability and high-performance rendering.
+![Wayland](https://img.shields.io/badge/Wayland-Native-8be9fd?style=for-the-badge&logo=wayland&logoColor=f8f8f2)
+![X11](https://img.shields.io/badge/X11-Supported-ffb86c?style=for-the-badge&logo=x.org&logoColor=f8f8f2)
+[![Website](https://img.shields.io/badge/Linux--Tech%26More-Website-50fa7b?style=for-the-badge)](https://linuxtechmore.com)
+[![Sponsor](https://img.shields.io/badge/Sponsor_the_next_commit-Support-ff5555?style=for-the-badge)](#%EF%B8%8F-support-the-project)
+
+Originally created in 2016, I have completely modernized the classic Octopus Conky Solus theme, refactoring the codebase to utilize the latest Lua API and Cairo graphics engine for enhanced stability and high-performance rendering.
 
 ## Available Themes
 
 ### Octopus Theme (X11)
-**Location:** `solus-octopus-conky-x11/`
 
 The classic Octopus-inspired dashboard with curved arms radiating from a central logo. Features full Lua Cairo graphics for smooth, animated rendering.
 
@@ -25,7 +29,6 @@ The classic Octopus-inspired dashboard with curved arms radiating from a central
 ---
 
 ### Pure Theme (Native Wayland)
-**Location:** `solus-pure-conky-wayland/`
 
 A clean, minimalist system monitor designed for native Wayland compositors. Uses Solus brand colors and modern typography.
 
