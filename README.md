@@ -126,17 +126,29 @@ See the `screenshots/` folder for preview images.
 
 ## ❤️ Support the Project
 
-If you find this theme helpful:
+If you find this theme helpful, there are many ways to support the project:
+
+### Financial Support
+If you'd like to support the development financially:
 
 <a href="https://www.buymeacoffee.com/linuxtechmore"><img src="https://img.shields.io/badge/Fuel%20the%20next%20commit-f1fa8c?style=for-the-badge&logo=buy-me-a-coffee&logoColor=282a36" height="32" /></a>
 <a href="https://github.com/sponsors/sniper1720"><img src="https://img.shields.io/badge/Become%20a%20Sponsor-bd93f9?style=for-the-badge&logo=github&logoColor=white" height="32" /></a>
 
-**Other ways to help:**
-- Star the Repository
-- Report Bugs
-- Suggest Features
-- Share with friends
+#### Bitcoin (BTC) Support
+<img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=1ALZQ6F2CkjQMP8rJrUnXgfVdWwbc6RPYu" alt="BTC QR Code" width="150" />
 
+```text
+1ALZQ6F2CkjQMP8rJrUnXgfVdWwbc6RPYu
+```
+
+### Contribute & Support
+Financial contributions are not the only way to help! Here are other options:
+- **Star the Repository**: It helps more people find the project!
+- **Report Bugs**: Found an issue? Open a ticket on GitHub.
+- **Suggest Features**: Have a cool idea? Let me know!
+- **Share**: Tell your friends!
+
+Every bit of support helps keep the project alive and ensures I can spend more time developing open source tools for the Linux community!
 ---
 
 ## License
