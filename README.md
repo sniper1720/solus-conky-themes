@@ -9,11 +9,13 @@ Originally created in 2016, I have completely modernized the classic Octupi/Solu
 
 The classic Octopus-inspired dashboard with curved arms radiating from a central logo. Features full Lua Cairo graphics for smooth, animated rendering.
 
+![Octopus Theme](screenshots/solus-octopus-conky-white.png)
+
 - Full Cairo graphics with curved "octopus arms"
 - CPU, RAM, SWAP, Disk, Network, and Uptime monitoring
 - Top processes and memory consumers
 - Dark and Light theme modes
-- Scalable for 1080p, 2K, and 4K displays
+- Adjustable scale to fit any display
 
 > [!IMPORTANT]
 > **Why is Octopus not available on native Wayland?**
@@ -27,10 +29,12 @@ The classic Octopus-inspired dashboard with curved arms radiating from a central
 
 A clean, minimalist system monitor designed for native Wayland compositors. Uses Solus brand colors and modern typography.
 
+![Pure Theme](screenshots/solus-pure-conky.png)
+
 - **Native Wayland support** with proper layer shell integration
 - **Comprehensive stats**: CPU (per-core), Memory (buffers/cached), Swap, Storage, Network (local + public IP), System info
 - **Top processes** grouped with their respective sections
-- **Dynamic scaling** for 1080p to 4K displays
+- **Adjustable scale** to fit any display
 - **Solus brand colors**: Blue #5294E2, Slate #4C5263
 - Lightweight, no Lua Cairo required
 
