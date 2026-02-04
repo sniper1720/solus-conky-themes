@@ -1,8 +1,5 @@
--- Solus Conky Theme - Main Lua Script
+-- Solus Octopus Conky Theme - Main Lua Script
 
---------------------------------------------------------------------------------
--- Cairo Loader
---------------------------------------------------------------------------------
 local function inject_globals(t)
     if type(t) ~= "table" then return end
     for k, v in pairs(t) do
@@ -44,32 +41,15 @@ if not cairo_xlib_surface_create then
     end
 end
 
---------------------------------------------------------------------------------
--- Settings & Configuration
---------------------------------------------------------------------------------
 local config_dir = conky_config:gsub("conky.conf$", "")
 package.path = config_dir .. "?.lua;" .. package.path
 
 local settings = require("settings")
 local scale = settings.scale or 1.0
 
---------------------------------------------------------------------------------
--- Display Server Detection
---------------------------------------------------------------------------------
-local function detect_display_server()
-    if conky_window and conky_window.display then
-        return "x11"
-    end
-    return "wayland"
-end
-
---------------------------------------------------------------------------------
--- Asset Path Helper
---------------------------------------------------------------------------------
 local function get_asset_path(asset_type, name)
     local theme = settings.theme_mode:lower()
-    local path = config_dir .. "assets/images/"
-
+    local path = config_dir .. "assets/"
     if asset_type == "common" then
         return path .. "common/" .. name
     elseif asset_type == "theme" then
@@ -78,9 +58,6 @@ local function get_asset_path(asset_type, name)
     return path .. name
 end
 
---------------------------------------------------------------------------------
--- Drawing Utilities
---------------------------------------------------------------------------------
 function set_color(cr, alpha)
     if settings.theme_mode == "WHITE" then
         cairo_set_source_rgba(cr, 1, 1, 1, alpha)
@@ -91,11 +68,8 @@ end
 
 function draw_image(cr, xc, yc, radius, path)
     if not path then return end
-
     local image = cairo_image_surface_create_from_png(path)
-    if cairo_surface_status(image) ~= CAIRO_STATUS_SUCCESS then
-        return
-    end
+    if cairo_surface_status(image) ~= CAIRO_STATUS_SUCCESS then return end
 
     local w = cairo_image_surface_get_width(image)
     local h = cairo_image_surface_get_height(image)
@@ -104,40 +78,25 @@ function draw_image(cr, xc, yc, radius, path)
     cairo_arc(cr, xc, yc, radius, 0, 2 * math.pi)
     cairo_clip(cr)
     cairo_new_path(cr)
-
     cairo_translate(cr, xc, yc)
     cairo_scale(cr, (2 * radius) / w, (2 * radius) / h)
     cairo_translate(cr, -w / 2, -h / 2)
-
     cairo_set_source_surface(cr, image, 0, 0)
     cairo_paint(cr)
-
     cairo_restore(cr)
     cairo_surface_destroy(image)
 end
 
---------------------------------------------------------------------------------
--- Conky Hooks
---------------------------------------------------------------------------------
-function conky_setup()
-end
+function conky_setup() end
 
 function conky_main()
     if conky_window == nil then return end
 
     local updates = tonumber(conky_parse("${updates}"))
     if updates < 3 then return end
+    if not cairo_xlib_surface_create then return end
+    if not conky_window.display then return end
 
-    -- Check display server
-    local display_server = detect_display_server()
-
-
-    if display_server ~= "x11" or not cairo_xlib_surface_create then
-
-        return
-    end
-
-    -- X11 mode: use Xlib surface (the only way to draw rings)
     local cs = cairo_xlib_surface_create(
         conky_window.display,
         conky_window.drawable,
@@ -154,7 +113,6 @@ function conky_main()
     end
 
     local extents = cairo_text_extents_t:create()
-
     local width = conky_window.width
     local height = conky_window.height
     local interface = settings.network_interface
@@ -164,7 +122,6 @@ function conky_main()
     local face_radius = height / 15
     draw_image(cr, centerx, centery, face_radius, get_asset_path("theme", "solus.png"))
 
-    -- Draw center ring
     set_color(cr, 0.9)
     cairo_set_line_width(cr, height / 250)
     cairo_set_line_cap(cr, CAIRO_LINE_CAP_ROUND)
@@ -246,79 +203,69 @@ function conky_main()
         return item_endx, item_endy, item_font_size
     end
 
-    -- CPU Section
+    -- CPU
     local cpu_val = conky_parse("${cpu}")
     local endx, endy, fsize = draw_section(10, "CPU", cpu_val .. "%", "cpu", true, cpu_val)
 
     local top_cpu_x = endx + (height / 25)
     local top_cpu_y = endy + (height / 37)
-
     set_color(cr, 1)
     cairo_set_font_size(cr, fsize)
-    cairo_text_extents(cr, "Top Processes", extents)
     cairo_move_to(cr, top_cpu_x, top_cpu_y)
     cairo_show_text(cr, "Top Processes")
-
     set_color(cr, 0.7)
     cairo_set_font_size(cr, fsize / 1.4)
     for i = 1, 5 do
         local name = conky_parse("${top name " .. i .. "}")
         local val = conky_parse("${top cpu " .. i .. "}")
-        local txt = string.sub(name, 1, 10) .. " " .. val .. "%"
         cairo_move_to(cr, top_cpu_x, top_cpu_y + (fsize * i) + (height / 150))
-        cairo_show_text(cr, txt)
+        cairo_show_text(cr, string.sub(name, 1, 10) .. " " .. val .. "%")
     end
 
-    -- SWAP Section
+    -- SWAP
     local swap_val = conky_parse("${swapperc}")
     if swap_val == "" then swap_val = "0" end
     draw_section(50, "SWAP", swap_val .. "%", "swap", true, swap_val)
 
-    -- Uptime Section
-    local uptime_val = conky_parse("${uptime_short}")
-    draw_section(90, "UPTIME", uptime_val, "uptime", false)
+    -- Uptime
+    draw_section(90, "UPTIME", conky_parse("${uptime_short}"), "uptime", false)
 
-    -- Root Disk Section
+    -- Root Disk
     local free = "Free: " .. conky_parse("${fs_free /}")
     local total = "Total: " .. conky_parse("${fs_size /}")
     draw_section(130, "ROOT", { free, total }, "root", false)
 
-    -- RAM Section
+    -- RAM
     local ram_val = conky_parse("${memperc}")
     local rx, ry, rs = draw_section(210, "RAM", ram_val .. "%", "ram", true, ram_val)
 
     local top_mem_x = rx + (height / 25)
     local top_mem_y = ry + (height / 37)
-
     set_color(cr, 1)
     cairo_set_font_size(cr, rs)
     cairo_move_to(cr, top_mem_x, top_mem_y)
     cairo_show_text(cr, "Top Memory")
-
     set_color(cr, 0.7)
     cairo_set_font_size(cr, rs / 1.4)
     for i = 1, 5 do
         local name = conky_parse("${top_mem name " .. i .. "}")
         local val = conky_parse("${top_mem mem_res " .. i .. "}")
-        local txt = string.sub(name, 1, 10) .. " " .. val
         cairo_move_to(cr, top_mem_x, top_mem_y + (rs * i) + (height / 150))
-        cairo_show_text(cr, txt)
+        cairo_show_text(cr, string.sub(name, 1, 10) .. " " .. val)
     end
 
-    -- Disk I/O Section
+    -- Disk I/O
     draw_section(170, "DISK I/O", { conky_parse("${diskio_read}"), conky_parse("${diskio_write}") }, "root", false)
 
-    -- Network Section
+    -- Network
     local ip_addr = conky_parse("${addr " .. interface .. "}")
     local nx, ny, ns = draw_section(320, "IP", ip_addr, "network", false)
-
     set_color(cr, 1)
     cairo_move_to(cr, nx + (height / 37), ny + (height / 20))
     cairo_show_text(cr, "Up: " .. conky_parse("${upspeed " .. interface .. "}"))
     cairo_move_to(cr, nx + (height / 37), ny + (height / 13))
     cairo_show_text(cr, "Down: " .. conky_parse("${downspeed " .. interface .. "}"))
 
-    -- Cleanup
     cairo_destroy(cr)
     cairo_surface_destroy(cs)
     tolua.takeownership(extents)
