@@ -32,6 +32,10 @@ The classic Octopus-inspired dashboard with curved arms radiating from a central
 
 A clean, minimalist system monitor designed for native Wayland compositors. Uses Solus brand colors and modern typography.
 
+> [!TIP]
+> **Can I use Pure on X11?**
+> Yes! While optimized for Wayland, you can run Pure on X11 (like Budgie) by simply swapping `out_to_wayland = true` and `out_to_x = false` in the `conky.conf`.
+
 ![Pure Theme](screenshots/solus-pure-conky.png)
 
 - **Native Wayland support** with proper layer shell integration
@@ -56,6 +60,12 @@ The installer will:
 2. **Recommend the appropriate theme** based on your session
 3. **Configure**: Network interface, scale factor, and theme mode
 4. **Set up autostart** (optional)
+5. **Uninstall anytime** with the same script
+
+To remove the themes and autostart files, simply run:
+```bash
+bash ./setup.sh --uninstall
+```
 
 ---
 
@@ -149,6 +159,7 @@ Financial contributions are not the only way to help! Here are other options:
 - **Share**: Tell your friends!
 
 Every bit of support helps keep the project alive and ensures I can spend more time developing open source tools for the Linux community!
+
 ---
 
 ## License

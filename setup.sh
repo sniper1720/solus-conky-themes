@@ -27,6 +27,16 @@ if [ ! -d "solus-pure-conky-wayland" ] && [ ! -d "solus-octopus-conky-x11" ]; th
     exit 0
 fi
 
+# Uninstallation Support
+if [ "$1" == "--uninstall" ]; then
+    echo -e "${RED}Uninstalling Solus Conky Themes...${NC}"
+    rm -rf "$HOME/.config/conky/solus-pure"
+    rm -rf "$HOME/.config/conky/solus-octopus"
+    rm -f "$HOME/.config/autostart/solus-conky.desktop"
+    echo -e "${GREEN}✓ Uninstallation complete.${NC}"
+    exit 0
+fi
+
 [ "$1" == "local" ] && shift
 
 echo -e "${CYAN}"
